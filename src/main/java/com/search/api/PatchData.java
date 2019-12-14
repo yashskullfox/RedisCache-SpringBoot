@@ -1,8 +1,9 @@
-package api;
+package com.search.api;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class PatchData {
+public class PatchData implements Serializable {
     public Long getValue() {
         return value;
     }

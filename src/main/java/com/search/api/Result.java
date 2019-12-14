@@ -1,8 +1,17 @@
-package api;
+package com.search.api;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class CacheData {
+public class Result implements Serializable {
+    public int getAccount() {
+        return account;
+    }
+
+    public void setAccount(int account) {
+        this.account = account;
+    }
+
     public String getType() {
         return type;
     }
@@ -19,6 +28,7 @@ public class CacheData {
         this.value = value;
     }
 
+    @NotNull private int account;
     private String type;
     @NotNull private Long value;
 }

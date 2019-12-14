@@ -1,4 +1,4 @@
-package api;
+package com.search.api;
 
 public class Request {
     public String getTerms() {

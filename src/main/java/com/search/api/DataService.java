@@ -1,4 +1,4 @@
-package api;
+package com.search.api;
 
 public interface DataService {
     void addDataToCache(int accountNumber, CacheData cacheData) throws Exception;
