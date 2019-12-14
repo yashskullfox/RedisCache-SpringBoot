@@ -1,8 +1,8 @@
 package com.search;
 
-import api.CacheData;
-import api.DataService;
-import api.PatchData;
+import com.search.api.CacheData;
+import com.search.api.DataService;
+import com.search.api.PatchData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.Cache;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,11 @@ public class CacheService implements DataService {
     @Override
     public void addDataToCache(int accountNumber, CacheData cacheData) throws Exception {
         String cacheKey = "Account_" + accountNumber;
+        long value = Long.valueOf(cacheData.getValue());
         if(retrieveByCacheKey(cacheKey) == null) {
             cache.put(cacheKey, new CacheInfo(accountNumber,
                     cacheData.getType(),
-                    cacheData.getValue(),
+                    value,
                     Instant.now()));
         }
     }

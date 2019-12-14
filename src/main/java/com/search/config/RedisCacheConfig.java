@@ -22,7 +22,7 @@ public class RedisCacheConfig {
     @Value("${redis.url:localhost}")
     private String redisHostName;
 
-    @Value("${redis.port:1234}")
+    @Value("${redis.port:6379}")
     private int redisPort;
 
     @Bean

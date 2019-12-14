@@ -1,8 +1,9 @@
 package com.search;
 
+import java.io.Serializable;
 import java.time.Instant;
 
-public class CacheInfo {
+public class CacheInfo implements Serializable {
 
     private int accoutnNumber;
     private String type;

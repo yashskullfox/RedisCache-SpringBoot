@@ -1,8 +1,8 @@
 package com.search;
 
-import api.Request;
-import api.Result;
-import api.Service;
+import com.search.api.Request;
+import com.search.api.Result;
+import com.search.api.Service;
 
 import java.util.List;
 
