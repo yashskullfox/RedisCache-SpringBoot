@@ -35,7 +35,8 @@ public class CacheService implements DataService {
 
     @Override
     public void removeDataFromCache(int accountNumber) throws Exception {
-
+            String cacheKey = "Account_" + accountNumber;
+                cache.evict(cacheKey);
     }
 
     @Override
