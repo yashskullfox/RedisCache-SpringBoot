@@ -25,6 +25,7 @@ public class RedisCacheConfig {
     @Value("${redis.port:6379}")
     private int redisPort;
 
+    //Config bean for Managing Redis/Jedis Serialized Cache data
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
         return new JedisConnectionFactory(new RedisStandaloneConfiguration(redisHostName, redisPort));
@@ -45,9 +46,12 @@ public class RedisCacheConfig {
 
     }
 
+    //This is Cache Config for Bucket
     private Map<String, RedisCacheConfiguration> redisConfiguration(
             RedisCacheConfiguration defaultCacheConfiguration) {
         Map<String, RedisCacheConfiguration> redisCacheConfigurations = new HashMap<>();
+        //Data time to live in Cache Bucket.
+        //Currently set one Hour It for Account Cache
         final RedisCacheConfiguration oneHour = defaultCacheConfiguration.entryTtl(Duration.ofHours(1));
 
         redisCacheConfigurations.put(CacheConfig.ACCOUNT_CACHE, oneHour);

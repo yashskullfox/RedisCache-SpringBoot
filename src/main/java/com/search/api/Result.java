@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class Result implements Serializable {
+
+
     public int getAccount() {
         return account;
     }

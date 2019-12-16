@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 public class CacheInfo implements Serializable {
+    /* This class is Cache Data stored in Cache Bucket */
 
     private int accoutnNumber;
     private String type;

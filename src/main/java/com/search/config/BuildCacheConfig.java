@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 @EnableCaching
 @Profile(value = {"build"})
 public class BuildCacheConfig {
+    //This bean is Redis CacheManager for Managing different cache/Bucket.
     @Bean
     public CacheManager cacheManager(){
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();

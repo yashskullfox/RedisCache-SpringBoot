@@ -4,6 +4,9 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class CacheData implements Serializable {
+
+    /* This class is POST Request or to add Data in Cache Bucket */
+
     public String getType() {
         return type;
     }
