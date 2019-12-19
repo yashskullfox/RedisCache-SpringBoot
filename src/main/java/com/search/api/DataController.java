@@ -16,13 +16,14 @@ public class DataController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addDataToCache(@Valid @RequestBody CacheData cacheData, @PathVariable("accountNumber") int accountNumber) throws Exception {
         dataService.addDataToCache(accountNumber, cacheData);
-        return ResponseEntity.ok("Account Added " + accountNumber);
+        return ResponseEntity.ok("Account " + accountNumber +" Added into Data" );
     }
 
-    @PatchMapping(value = "/Account/{accountNumber}")
-    public void updateDataInCache(@PathVariable int accountNumber, @Valid @RequestBody PatchData patchData) throws Exception{
+    @PatchMapping(value = "/Account/{accountNumber}",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateDataInCache(@PathVariable int accountNumber, @Valid @RequestBody PatchData patchData) throws Exception{
         dataService.updateDataInCache(accountNumber, patchData);
-        return;
+        return ResponseEntity.ok("Account "+accountNumber+" is updated");
     }
 
     @DeleteMapping(value = "/Account/{accountNumber}",

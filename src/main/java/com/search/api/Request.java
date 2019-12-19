@@ -1,13 +1,13 @@
 package com.search.api;
 
 public class Request {
-    public String getTerms() {
-        return terms;
+    public String getAccount() {
+        return account;
     }
 
-    public void setTerms(String terms) {
-        this.terms = terms;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    private String terms;
+    private String account;
 }

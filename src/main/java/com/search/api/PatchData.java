@@ -4,6 +4,9 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class PatchData implements Serializable {
+
+    /* This class is Patch Request Data to store in Cache Bucket */
+
     public Long getValue() {
         return value;
     }
@@ -12,6 +15,16 @@ public class PatchData implements Serializable {
         this.value = value;
     }
 
-    @NotNull
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
     private Long value;
+
+    @NotNull
+    private String action;
 }
