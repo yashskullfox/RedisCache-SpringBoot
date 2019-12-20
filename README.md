@@ -28,7 +28,7 @@ export DEBUG_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -DDEBUG -Xrunjdwp:tran
 export JAVA_OPTS="-Xms512M -Xmx512M -Xmn128M -Xverify:none -Xshare:off"
 export MAVEN_OPTS="-Xmx1024M  ${DEBUG_OPTS} ${JAVA_OPTS}"
 
-mvn spring-boot:run -Dspring.profiles.active=ehi-xqa,localhost,redis \
+mvn spring-boot:run 
 -Dcatalina.base=target/tomcat \
 ```
 
@@ -125,4 +125,4 @@ RESPONSE: HTTP 200
 Content "Removed account 1234"
 ```
 
-# Questions and Comments: skullfox@hackermail.com
+# Questions and Comments : skullfox@hackermail.com
