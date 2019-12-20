@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 public class SearchController {
 
-   private Service service;
+   @Autowired private Service service;
 
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
@@ -19,7 +19,7 @@ public class SearchController {
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE
     )
-    public List<Result> search(@RequestBody Request request) throws Exception{
+    public Result search(@RequestBody Request request) throws Exception{
         return service.search(request);
     }
 }

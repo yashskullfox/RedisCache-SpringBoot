@@ -2,6 +2,7 @@ package com.search.api;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 
 public class Result implements Serializable {
 
@@ -30,7 +31,16 @@ public class Result implements Serializable {
         this.value = value;
     }
 
+    public Instant getLastModification() {
+        return lastModification;
+    }
+
+    public void setLastModification(Instant lastModification) {
+        this.lastModification = lastModification;
+    }
+
     @NotNull private int account;
     private String type;
     @NotNull private Long value;
+    Instant lastModification;
 }
