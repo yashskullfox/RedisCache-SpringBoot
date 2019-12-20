@@ -23,7 +23,7 @@
         <!-- Environment Properties -->
         <spring.profiles.active>build</spring.profiles.active>
         <commonslang3.version>3.9</commonslang3.version>
-
+        <jedis.version>3.2.0</jedis.version>
 
     </properties>
 
@@ -52,6 +52,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commonslang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
     </dependencies>
 </project>
