@@ -4,10 +4,10 @@ This is a sample Java / Maven / Spring Boot (version 2.1.9) application that can
 I hope it helps you.
 
 ## Description about application
-In application there is a concept of CacheManager and CacheFactory to store the data and manage the Redis cache for that you can find Config package where required Beans is created and maintained.
-For Managing Bucket ( So called Database table for Cache ) is configured in CacheConfig In current project there is only one bucket used ACCOUNT_CACHE.
-For storing data in Bucket Redis use Cache key concept ( So called primary key or Identifier ) this application generate cache key like ```ACCOUNT_1234```
-And whenever Search account called will retrieve the cacheKey if its available then read the data stored on that cacheKey and pass it to response to postman or person who requested for it.
+* In application there is a concept of CacheManager and CacheFactory to store the data and manage the Redis cache for that you can find Config package where required Beans is created and maintained.
+* For Managing Bucket ( So called Database table for Cache ) is configured in CacheConfig In current project there is only one bucket used ACCOUNT_CACHE.
+* For storing data in Bucket Redis use Cache key concept ( So called primary key or Identifier ) this application generate cache key like ```ACCOUNT_1234```
+* And whenever Search account called will retrieve the cacheKey if its available then read the data stored on that cacheKey and pass it to response to postman or person who requested for it.
 
 ## How to Run
 This application is spring boot it is packaged as a war which has Tomcat 8 embedded. No Tomcat or JBoss installation is necessary. You run it using the java -jar command.
@@ -30,7 +30,6 @@ export MAVEN_OPTS="-Xmx1024M  ${DEBUG_OPTS} ${JAVA_OPTS}"
 
 mvn spring-boot:run -Dspring.profiles.active=ehi-xqa,localhost,redis \
 -Dcatalina.base=target/tomcat \
--Dlogger.level=info
 ```
 
 Run it anyway but don't forget to turn on your Redis Cache server in your local,
@@ -69,16 +68,17 @@ POST /
 Content-Type: application/json
 
 {
-"account" : "1234",
+"account" : "1234"
 }
 
 RESPONSE: HTTP 201 (Created)
 Location header: http://localhost:8080/
 
 {
-"account":"1234;
-"type":"Saving"
-"value":"1555"
+"account": 1234,
+"type": "Saving",
+"value": 555,
+"lastModification": "2019-12-20T02:40:24.312Z"
 }
 ```
 
