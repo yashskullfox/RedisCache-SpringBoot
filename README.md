@@ -1,6 +1,6 @@
 # Spring Boot "Redis Cache" Example Project for proof of concept
 
-This is a sample Java / Maven / Spring Boot (version 2.1.9) application that can be used as a starter for creating a microservice complete with built-in health check, metrics and much more.
+This is a sample Java / Maven / Spring Boot (version 2.2.2) application that can be used as a starter for creating a microservice complete with built-in health check, metrics and much more.
 I hope it helps you.
 
 ## Description about application
