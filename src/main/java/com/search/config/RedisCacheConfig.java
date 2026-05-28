@@ -5,6 +5,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Configuration
 @EnableCaching
+@Profile("!build")
 public class RedisCacheConfig {
 
     @Value("${redis.url:localhost}")
@@ -25,7 +27,6 @@ public class RedisCacheConfig {
     @Value("${redis.port:6379}")
     private int redisPort;
 
-    //Config bean for Managing Redis/Jedis Serialized Cache data
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
         return new JedisConnectionFactory(new RedisStandaloneConfiguration(redisHostName, redisPort));
@@ -33,30 +34,18 @@ public class RedisCacheConfig {
 
     @Bean
     public CacheManager cacheManager(JedisConnectionFactory redisConnectionFactory) {
-        final RedisCacheConfiguration defaultCacheConfiguration =
-                RedisCacheConfiguration.defaultCacheConfig().disableCachingNullValues();
-        final Map<String, RedisCacheConfiguration> cacheConfigurationMap =
-                redisConfiguration(defaultCacheConfiguration);
-
+        RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig().disableCachingNullValues();
         return RedisCacheManager.builder(redisConnectionFactory)
-                .withInitialCacheConfigurations(cacheConfigurationMap)
-                .cacheDefaults(defaultCacheConfiguration)
+                .withInitialCacheConfigurations(buildCacheConfig(defaults))
+                .cacheDefaults(defaults)
                 .disableCreateOnMissingCache()
                 .build();
-
     }
 
-    //This is Cache Config for Bucket
-    private Map<String, RedisCacheConfiguration> redisConfiguration(
-            RedisCacheConfiguration defaultCacheConfiguration) {
-        Map<String, RedisCacheConfiguration> redisCacheConfigurations = new HashMap<>();
-        //Data time to live in Cache Bucket.
-        //Currently set one Hour It for Account Cache
-        final RedisCacheConfiguration oneHour = defaultCacheConfiguration.entryTtl(Duration.ofHours(1));
-
-        redisCacheConfigurations.put(CacheConfig.ACCOUNT_CACHE, oneHour);
-
-        return Collections.unmodifiableMap(redisCacheConfigurations);
+    private Map<String, RedisCacheConfiguration> buildCacheConfig(RedisCacheConfiguration defaults) {
+        Map<String, RedisCacheConfiguration> configs = new HashMap<>();
+        configs.put(CacheConfig.ACCOUNT_CACHE, defaults.entryTtl(Duration.ofHours(1)));
+        return Collections.unmodifiableMap(configs);
     }
-
 }
+

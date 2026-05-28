@@ -1,11 +1,14 @@
 package com.search.api;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 
 public class Result implements Serializable {
 
+    private int account;
+    private String type;
+    private Long value;
+    private Instant lastModification;
 
     public int getAccount() {
         return account;
@@ -38,9 +41,5 @@ public class Result implements Serializable {
     public void setLastModification(Instant lastModification) {
         this.lastModification = lastModification;
     }
-
-    @NotNull private int account;
-    private String type;
-    @NotNull private Long value;
-    Instant lastModification;
 }
+
