@@ -9,13 +9,14 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableCaching
-@Profile(value = {"build"})
+@Profile("build")
 public class BuildCacheConfig {
-    //This bean is Redis CacheManager for Managing different cache/Bucket.
+
     @Bean
-    public CacheManager cacheManager(){
+    public CacheManager cacheManager() {
         ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
         cacheManager.setCacheNames(CacheConfig.CACHE_LIST);
         return cacheManager;
     }
 }
+

@@ -1,25 +1,25 @@
 package com.search.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class SearchController {
 
-   @Autowired private Service service;
+    private final Service service;
 
-    public static final String APPLICATION_JSON_VALUE = "application/json";
+    public SearchController(Service service) {
+        this.service = service;
+    }
 
     @PostMapping(
             value = "/",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE
-    )
-    public Result search(@RequestBody Request request) throws Exception{
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Result search(@RequestBody Request request) throws Exception {
         return service.search(request);
     }
 }
+

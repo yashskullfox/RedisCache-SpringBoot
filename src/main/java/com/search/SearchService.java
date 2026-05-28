@@ -5,13 +5,10 @@ import com.search.api.Result;
 import com.search.api.Service;
 import org.springframework.cache.Cache;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @org.springframework.stereotype.Service("SearchService")
 public class SearchService implements Service {
 
-    private Cache cache;
+    private final Cache cache;
 
     public SearchService(Cache cache) {
         this.cache = cache;
@@ -19,14 +16,11 @@ public class SearchService implements Service {
 
     @Override
     public Result search(Request request) throws Exception {
-        String accountNumber = request.getAccount();
-        List cacheData = new ArrayList<>();
+        String cacheKey = "Account_" + request.getAccount();
         Result result = new Result();
-        String cacheKey = "Account_" + accountNumber;
         Cache.ValueWrapper valueWrapper = cache.get(cacheKey);
         if (valueWrapper != null) {
-            CacheInfo cacheInfo =
-                    (CacheInfo) valueWrapper.get();
+            CacheInfo cacheInfo = (CacheInfo) valueWrapper.get();
             result.setAccount(cacheInfo.getAccoutnNumber());
             result.setType(cacheInfo.getType());
             result.setValue(cacheInfo.getValue());
@@ -35,3 +29,4 @@ public class SearchService implements Service {
         return result;
     }
 }
+

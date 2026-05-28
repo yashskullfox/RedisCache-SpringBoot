@@ -1,8 +1,10 @@
 package com.search.api;
 
-public class Request {
+import java.io.Serializable;
 
-    /* request to search for account from cache and see the stored value in cache */
+public class Request implements Serializable {
+
+    private String account;
 
     public String getAccount() {
         return account;
@@ -11,6 +13,5 @@ public class Request {
     public void setAccount(String account) {
         this.account = account;
     }
-
-    private String account;
 }
+

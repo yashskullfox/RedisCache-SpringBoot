@@ -1,0 +1,89 @@
+name: Release – Versioned SemVer Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.1.0)'
+        required: true
+        default: '1.1.0'
+      release_notes:
+        description: 'Short release notes'
+        required: false
+        default: 'Production-ready release after E2E green.'
+
+jobs:
+  # ─── Gate: E2E must pass before release ────────────────────────────────────
+  e2e-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run E2E gate
+        run: mvn clean verify -Dspring.profiles.active=build
+
+      - name: Upload Karate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-karate-reports
+          path: target/karate-reports/
+          retention-days: 30
+
+  # ─── Publish release only when E2E passes ──────────────────────────────────
+  publish-release:
+    needs: e2e-gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build release JAR (skip tests – already passed in gate)
+        run: mvn clean package -DskipTests
+
+      - name: Create Git tag v${{ github.event.inputs.version }}
+        run: |
+          git config user.name  "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "v${{ github.event.inputs.version }}" \
+                  -m "Release v${{ github.event.inputs.version }}: ${{ github.event.inputs.release_notes }}"
+          git push origin "v${{ github.event.inputs.version }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: "Release v${{ github.event.inputs.version }}"
+          body: |
+            ## Release v${{ github.event.inputs.version }}
+
+            **Notes:** ${{ github.event.inputs.release_notes }}
+
+            ### What's included
+            - Spring Boot 3.4.5 upgrade (Java 17)
+            - Karate E2E test suite
+            - GitHub Actions CI/CD
+            - REST-MCP Northstar roadmap
+
+            ### Verification
+            - ✅ All unit tests passed
+            - ✅ All Karate E2E tests passed
+          files: target/search-controller-*.jar
