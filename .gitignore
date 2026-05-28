@@ -1,23 +1,65 @@
-bin/
+# ─── Build output ─────────────────────────────────────────────────────────────
 target/
-.idea/
-.mymetadata
-.project
-.classpath
-.DS_Store
-.springBeans
-.settings/
-**/*.iml
-*.iml
-src/test/curl/.orchCurl_*
-src/test/curl/.Curl_tmp
+bin/
+out/
+
+# ─── Maven ────────────────────────────────────────────────────────────────────
 pom.xml.tag
 pom.xml.releaseBackup
+pom.xml.versionsBackup
 pom.xml.next
 release.properties
-**/*.ami
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
+# ─── IDE – IntelliJ ───────────────────────────────────────────────────────────
+.idea/
+*.iml
+*.ipr
+*.iws
 
+# ─── IDE – Eclipse / STS ──────────────────────────────────────────────────────
+.project
+.classpath
+.settings/
+.springBeans
+.mymetadata
+*.launch
+*.factorypath
+
+# ─── IDE – VS Code ────────────────────────────────────────────────────────────
+.vscode/
+*.code-workspace
+
+# ─── AI tooling ───────────────────────────────────────────────────────────────
+.qodo/
+.copilot/
+
+# ─── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+/tmp/
+
+# ─── Environment / secrets ────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.local
+
+# ─── Test artefacts ───────────────────────────────────────────────────────────
+src/test/curl/.orchCurl_*
+src/test/curl/.Curl_tmp
+
+# ─── Redis dump ───────────────────────────────────────────────────────────────
+dump.rdb
+
+# ─── Windows crash dumps ──────────────────────────────────────────────────────
 bash.exe.stackdump
 sh.exe.stackdump
-dump.rdb

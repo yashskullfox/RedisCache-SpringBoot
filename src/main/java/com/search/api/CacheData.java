@@ -1,11 +1,14 @@
 package com.search.api;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 
 public class CacheData implements Serializable {
 
-    /* This class is POST Request or to add Data in Cache Bucket */
+    private String type;
+    @NotBlank
+    private String value;
 
     public String getType() {
         return type;
@@ -22,7 +25,5 @@ public class CacheData implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-
-    private String type;
-    @NotNull private String value;
 }
+

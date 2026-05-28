@@ -14,11 +14,12 @@ public class CacheConfig {
 
     public static final String ACCOUNT_CACHE = "AccountCache";
 
-    public static final List<String> CACHE_LIST = Collections.unmodifiableList(Arrays.asList(ACCOUNT_CACHE));
+    public static final List<String> CACHE_LIST =
+            Collections.unmodifiableList(Arrays.asList(ACCOUNT_CACHE));
 
-    //Cache Bucket
     @Bean(name = ACCOUNT_CACHE)
-    public Cache accountCache(CacheManager cacheManager){
+    public Cache accountCache(CacheManager cacheManager) {
         return cacheManager.getCache(ACCOUNT_CACHE);
     }
 }
+
