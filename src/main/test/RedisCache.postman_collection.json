@@ -1,88 +1,45 @@
 {
   "info": {
     "_postman_id": "ef1cf3ea-6bf5-47f3-b64c-46c92bf73bfb",
-    "name": "RedisCache",
+    "name": "RedisCache v1.1.0",
+    "description": "Manual smoke-test collection for RedisCache-SpringBoot. Start the app with ./SpringBootRunner.sh before running.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "ADD in Cache",
+      "name": "Health Check",
       "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "name": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n\t\"type\":\"Saving\", \n\t\"value\":\"555\"\n}"
-        },
+        "method": "GET",
+        "header": [],
         "url": {
-          "raw": "http://localhost:8080/Account/1234",
+          "raw": "http://localhost:8080/actuator/health",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
-            "Account",
-            "1234"
-          ]
-        },
-        "description": "This End point will add data into RedisCahe."
-      },
-      "response": []
-    },
-    {
-      "name": "Remove from Cache",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Content-Type",
-            "name": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": ""
-        },
-        "url": {
-          "raw": "http://localhost:8080/Account/1234",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "Account",
-            "1234"
+            "actuator",
+            "health"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "PATCH Update value",
+      "name": "Add Account to Cache",
       "request": {
-        "method": "PATCH",
+        "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "name": "Content-Type",
             "value": "application/json",
             "type": "text"
           }
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"action\":\"add\",\n\t\"value\":\"1000\"\n}",
+          "raw": "{\n\t\"type\": \"savings\",\n\t\"value\": \"1000\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -105,56 +62,24 @@
       "response": []
     },
     {
-      "name": "PATCH Delete",
-      "request": {
-        "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "name": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n\t\"action\":\"delete\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8080/Account/1234",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "Account",
-            "1234"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Search from Cache",
+      "name": "Search Account from Cache",
       "request": {
         "method": "POST",
         "header": [
           {
             "key": "Content-Type",
-            "name": "Content-Type",
             "value": "application/json",
             "type": "text"
           }
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"account\":\"1234\"\n}"
+          "raw": "{\n\t\"account\": \"1234\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": {
           "raw": "http://localhost:8080/",
@@ -165,6 +90,131 @@
           "port": "8080",
           "path": [
             ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Credit Account (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"action\": \"Credit\",\n\t\"value\": 500\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/Account/1234",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "Account",
+            "1234"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Withdraw from Account (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"action\": \"Withdraw\",\n\t\"value\": 200\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/Account/1234",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "Account",
+            "1234"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Remove via PATCH action",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"action\": \"Remove\",\n\t\"value\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/Account/1234",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "Account",
+            "1234"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Account from Cache",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/Account/1234",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "Account",
+            "1234"
           ]
         }
       },
