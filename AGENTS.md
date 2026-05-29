@@ -10,8 +10,9 @@ Sample Spring Boot 3.4.5 + Redis cache service demonstrating the **Walmart Turin
 turn any backend REST repo into an MCP-capable service so AI agents can call it directly
 via the Model Context Protocol — without breaking existing REST consumers.
 
-Current state: REST baseline is production-ready (v1.1.0). Active work is Phase 1 of the
-REST-MCP bridge (see `docs/REST-MCP-ROADMAP.md`).
+Current state: REST-MCP bridge is **fully implemented** (v1.2.0). All four MCP phases are
+complete. See `docs/REST-MCP-ROADMAP.md` for the versioning policy and `one-requirement.md`
+for the full checklist.
 
 ---
 
@@ -49,13 +50,16 @@ for local runs — without it the app tries to connect to a real Redis instance.
 
 ## Endpoint Matrix
 
-| Method | Path                       | Controller         | Service method        | Notes                                   |
-|--------|----------------------------|--------------------|-----------------------|-----------------------------------------|
-| POST   | `/Account/{accountNumber}` | `DataController`   | `addDataToCache`      | Idempotent — no-op if key exists        |
-| PATCH  | `/Account/{accountNumber}` | `DataController`   | `updateDataInCache`   | Actions: `Credit`, `Withdraw`, `Remove` |
-| DELETE | `/Account/{accountNumber}` | `DataController`   | `removeDataFromCache` | Evicts key; no-op if missing            |
-| POST   | `/`                        | `SearchController` | `search`              | Cache miss returns zeroed `Result`      |
-| GET    | `/actuator/health`         | Spring Actuator    | —                     | Always UP in build profile              |
+| Method | Path                       | Controller         | Service method        | Notes                                    |
+|--------|----------------------------|--------------------|-----------------------|------------------------------------------|
+| POST   | `/Account/{accountNumber}` | `DataController`   | `addDataToCache`      | Idempotent — no-op if key exists         |
+| PATCH  | `/Account/{accountNumber}` | `DataController`   | `updateDataInCache`   | Actions: `Credit`, `Withdraw`, `Remove`  |
+| DELETE | `/Account/{accountNumber}` | `DataController`   | `removeDataFromCache` | Evicts key; no-op if missing             |
+| POST   | `/`                        | `SearchController` | `search`              | Cache miss returns zeroed `Result`       |
+| GET    | `/actuator/health`         | Spring Actuator    | —                     | Always UP in build profile               |
+| GET    | `/actuator/info`           | Spring Actuator    | `McpInfoContributor`  | Lists MCP tools under `mcp.tools`        |
+| GET    | `/mcp/sse`                 | MCP SDK            | —                     | SSE transport — MCP client connects here |
+| POST   | `/mcp/message`             | MCP SDK            | —                     | MCP JSON-RPC messages; auth-gated        |
 
 ---
 
@@ -87,6 +91,14 @@ src/main/java/com/search/
 │   ├── CacheConfig.java         ← profile-switched cache bean factory
 │   ├── BuildCacheConfig.java    ← ConcurrentMapCache (build/test profile)
 │   ├── RedisCacheConfig.java    ← JedisConnectionFactory (prod profile)
+├── mcp/
+│   ├── McpConfig.java           ← McpSyncServer + WebMvcSseServerTransportProvider beans
+│   ├── McpToolAdapter.java      ← interface for auto-wiring tool specs
+│   ├── Tool.java                ← @Tool annotation (name, description, inputSchema, version)
+│   ├── AccountSearchTool.java   ← searchAccount + getAccountBalance read tools
+│   ├── AccountWriteTool.java    ← creditAccount + withdrawAccount + deleteAccount write tools
+│   ├── McpInfoContributor.java  ← /actuator/info lists all tools + version
+│   └── McpAuthFilter.java       ← X-MCP-API-Key guard + Accept-MCP-Version negotiation
 ├── CacheService.java            ← implements DataService + Service
 ├── SearchService.java           ← thin search façade (delegates to CacheService)
 └── SearchApplication.java
@@ -108,19 +120,20 @@ src/main/java/com/search/
 
 ## When You Expose a Service Method as an MCP Tool (Turing Pattern)
 
-This is the active Phase 1 work. Follow the pattern in `docs/REST-MCP-ROADMAP.md`:
+MCP bridge is **complete** (v1.2.0). The pattern is established — follow it when adding new tools:
 
-1. **Read-only first.** Start with `searchAccount` / `getAccountBalance` — no auth needed.
-2. **Adapter class** goes in `src/main/java/com/search/mcp/` (create the package).
+1. **Read-only first.** Add to `AccountSearchTool`; write tools go in `AccountWriteTool`.
+2. **Adapter class** lives in `src/main/java/com/search/mcp/`.
 3. **Never modify existing service signatures.** The MCP adapter calls services; services
    do not know about MCP.
 4. **Tool schema** must have: `name` (camelCase), `description` (≥ 1 sentence), `inputSchema`
    matching the service method parameters.
-5. **Contract test required** — add an MCP client integration test alongside unit tests.
-6. **REST endpoint stays unchanged** — verify with existing Karate suite after adding MCP layer.
+5. **Implement `McpToolAdapter`** — add the `SyncToolSpecification` to `toolSpecs()`.
+   `McpConfig` auto-wires all `McpToolAdapter` beans.
+6. **Contract test required** — add unit tests in `src/test/.../mcp/` and extend `McpIntegrationIT`.
+7. **REST endpoint stays unchanged** — verify with existing Karate suite after adding MCP layer.
 
-Recommended SDK: `io.modelcontextprotocol:sdk` (pinned version). See roadmap Phase 2 task list
-for dependency coordinates.
+SDK: `io.modelcontextprotocol.sdk:mcp-spring-webmvc:0.9.0` (pinned in `pom.xml`).
 
 ---
 
